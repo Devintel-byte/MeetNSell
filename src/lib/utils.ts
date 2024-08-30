@@ -58,7 +58,7 @@ export function constructMetadata({
 			creator: '@devintel',
 		},
 		icons,
-		metadataBase: new URL(''),
+		metadataBase: new URL('https://meetnsell.vercel.app'),
 		...(noIndex && {
 			robots: {
 				index: false,
