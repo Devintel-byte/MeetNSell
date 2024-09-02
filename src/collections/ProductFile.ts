@@ -36,20 +36,25 @@ const yourOwnAndPurchased: Access = async ({ req }) => {
 	});
 
 	const purchasedProductFileIds = orders
-		.map((order) => {
-			return order.products.map((product: string | Product) => {
-				if (typeof product === 'string')
-					return req.payload.logger.error(
-						'Search depth not sufficient to find purchased file IDs'
-					);
+	.map((order) => {
+		const products = order.products as (string | Product)[];
 
-				return typeof product.product_files === 'string'
-					? product.product_files
-					: product.product_files.id;
-			});
-		})
-		.filter(Boolean)
-		.flat();
+		return products.map((product) => {
+			if (typeof product === 'string') {
+				req.payload.logger.error(
+					'Search depth not sufficient to find purchased file IDs'
+				);
+				return null; // Return null or handle it as needed
+			}
+
+			return typeof product.product_files === 'string'
+				? product.product_files
+				: product.product_files.id;
+		});
+	})
+	.filter(Boolean)
+	.flat();
+
 
 	return {
 		id: {
